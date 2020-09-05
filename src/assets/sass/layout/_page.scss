@@ -1,0 +1,29 @@
+.page {
+  background: #f1f4f5;
+
+  &__wrap {
+    margin-top: 60px;
+    // header 60px, footer 42px = 102px
+    min-height: calc(100vh - 102px);
+  }
+
+  &__container {
+    padding: 0 15px;
+  }
+
+  &__content {
+    padding: 5px;
+    // Для треш страницы, из-за зумера появляется горизонтальный скроллбар
+    overflow: hidden;
+    width: 100%;
+  }
+
+  &__block {
+    // используется минимум в /bases
+    padding: 10px 15px;
+  }
+
+  &--menubarOffset {
+    margin-left: 260px;
+  }
+}

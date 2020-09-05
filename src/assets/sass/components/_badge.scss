@@ -1,0 +1,23 @@
+.badge {
+  &-warning {
+    color: #fff;
+    background-color: #f2a654;
+  }
+
+  &-info {
+    background-color: #57c7d4;
+  }
+
+  .up {
+    position: relative;
+    top: -10px;
+    margin: 0 -0.8em;
+    border-radius: 15px;
+  }
+
+  &--right {
+    position: absolute;
+    top: 8px;
+    right: 0;
+  }
+}

@@ -1,0 +1,64 @@
+// colors
+$black:                   #000;
+$blue:                    #62a8ea;
+$cyan:                    #57c7d4;
+$dark:                    #343a40;
+$default:                 #e4eaec;
+$gray:                    #76838f;
+$green:                   #46be8a;
+$indigo:                  #6610f2;
+$light-gray:              #f0f0f0;
+$orange:                  #fd7e14;
+$purple:                  #6f42c1;
+$pink:                    #e83e8c;
+$red:                     #f96868;
+$teal:                    #20c997;
+$yellow:                  #f2a654;
+$placeholder:             #adadad;
+
+$theme-colors: (
+  danger:                 #f96868,
+  gray:                   #76838f,
+  indigo:                 #6610f2,
+  info:                   #57c7d4,
+  light-gray:             #f0f0f0,
+  primary:                #62a8ea,
+  success:                #46be8a,
+  warning:                #fdab3d,
+  orange:                 #fd7e14,
+  placeholder:            #adadad,
+  white:                  #fff
+);
+
+$colors: (
+  blue:                   #62a8ea,
+  danger:                 #f96868,
+  gray:                   #76838f,
+  info:                   #57c7d4,
+  light-gray:             #f0f0f0,
+  primary:                #62a8ea,
+  success:                #46be8a,
+  warning:                #fdab3d,
+  placeholder:            #adadad,
+  default:                #e4eaec,
+  white:                  #fff
+);
+
+// Customize the light and dark text colors for use in our YIQ color contrast function.
+$yiq-text-dark:           #76838f;
+
+// The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
+$yiq-contrasted-threshold:  190;
+
+/* media breakpoints */
+$breakpoint:              768px;
+$xlg:                     1600px;
+$lg:                      1500px;
+$slg:                     1400px;
+$md:                      1200px;
+$smd:                     992px;
+$sm:                      540px;
+$xxs:                     420px;
+$xs:                      330px;
+
+$bw:                      1px;

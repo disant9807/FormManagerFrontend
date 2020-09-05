@@ -1,0 +1,393 @@
+<template>
+  <div class="dt">
+    <div class="filter__block flex flex-row-reverse flex__basis justify-content-between">
+      input(type="text" v-model="someText" @keyup="testFn")
+      p {{ someText }}
+      .filter__btn
+        .filterblock.flex.justify-content-between(v-if="toggleSettings")
+          .radio
+            multiselect(v-model="perPage"
+                        :allow-empty="false"
+                        :options=[5, 10, 15, 25]
+                        :searchable="false"
+                        :show-labels="false"
+                        @select="onChangePerPage")
+          buttonExcel(:name="'Платежи'" :id="$refs.vuetable")
+          b-dropdown.filterblock--btn(text="Поля" right variant="default")
+            checkbox.dropdown-item(v-for="(field, index) in fields" v-if="field.hasOwnProperty('visible')"
+                    :key="index"
+                    :name="field.title"
+                    :checked="field.visible"
+                    @click.native="onHandleClick(field.name)")
+    </div>
+    <div class="dt__cont">
+      .dt-spinner(v-if="isDtLoading")
+        .dt-spinner__block
+          spinner-battlenet(:size="32" :color="'bnet'")
+      vuetable(ref="vuetable"
+              pagination-path=""
+              no-data-template="Данные отсутствуют"
+              api-url="https://nd-api.gio.ru/load/projects/datatable"
+              :http-fetch="myFetch"
+              data-path="data"
+              :fields="fields"
+              :per-page="perPage"
+              :detail-row-component="detailRowComponent"
+              :css="css.table"
+              :sort-order="sortOrder"
+              :append-params="testFn"
+              @vuetable:loading="onDtLoading"
+              @vuetable:loaded="onDtLoaded"
+              @vuetable:cell-clicked="onCellClicked"
+              @vuetable:pagination-data="onPaginationData")
+        // :api-url="urlLocation + apiUrl"
+        // :api-url="'https://nd-api.gio.ru/load/projects/datatable'"
+        //- Подробная информация.
+        template(#dt-toggle-cell="props")
+          .flex.align-items-center.dt--first-cell
+            //- Первая колонка с кнопкой "плюсик", которая открывает доп информацию по строке и меняет икноку на "минус"
+            div(v-if="onHideToggle"
+                @click="onToggleDatatable('view-item', props.rowData, props.rowData.id)")
+              //- Плюсик
+              div(name="plus" size="medium" v-if="!onToggleIcon(props.rowData)")
+              //- Минусик
+              div(name="minus" size="medium" v-else="onToggleIcon(props.rowData)")
+        <template #actions="props">
+          <div class="flex">
+            <div class="btn btn--icon btn-success btn-xs mr-1">
+            </div> (@click="onEditRow(props.rowData)")
+          </div>
+        </template>
+    </div>
+    <div class="flex justify-content-between align-items-center">
+      <vuetable-pagination-info ref="paginationInfo"
+                                info-template="Записи с {from} по {to} из {total}"
+                                :no-data-template="'Извините, не удалось загрузить данные'" />
+      <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage" :css="css.pagination" />
+    </div>
+  </div>
+</template>
+
+<script>
+// imports
+  import axios from '@/utils/axios-global'
+  import buttonExcel from '@/components/buttons/buttonExcel'
+  import checkbox from '@/components/checkbox/checkbox'
+  import Multiselect from 'vue-multiselect'
+  import spinnerBattlenet from '@/components/spinner/spinner-battlenet'
+
+    import { mapGetters } from 'vuex'
+
+  // Документация https://github.com/ratiw/vuetable-2-tutorial/
+    import Vuetable from 'vuetable-2'
+    import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
+    import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
+    import dtCss from '@/assets/js/dtCss'
+
+    import _ from 'lodash';
+
+  // Потому что стандартным ресайзом не рекомендуется пользоваться из-за постоянных вычислений. Мозилла РЕКОМНЕДУЕТ использовать для изменения ДОМ данную функцию
+  (function() {
+    var throttle = function(type, name, obj) {
+        obj = obj || window;
+        var running = false;
+        var func = function() {
+            if (running) { return; }
+            running = true;
+             requestAnimationFrame(function() {
+                obj.dispatchEvent(new CustomEvent(name));
+                running = false;
+            });
+        };
+        obj.addEventListener(type, func);
+    };
+
+    /* init - you can init any event */
+    throttle("resize", "optimizedResize");
+  })();
+
+export default {
+  name: 'dtable',
+  components: {
+    buttonExcel,
+    checkbox,
+    Multiselect,
+    spinnerBattlenet,
+    Vuetable,
+    VuetablePagination,
+    VuetablePaginationInfo
+  },
+  props: {
+    apiUrl: String,
+    fields: {
+      type: Array,
+      required: true
+    },
+    detailRowComponent: String,
+    dtitle: String,
+    // sortOrder: {
+    //   type: Array,
+    //   default: []
+    // },
+    sortOrder: Object
+  },
+  data() {
+    return {
+      css: dtCss,
+      dataCount: 0,
+      dtBreakpoints: [],
+      fieldsLength: '',
+      isDtLoading: false,
+      isHideToggle: true,
+      perPage: 10,
+      screenWidth: window.innerWidth,
+      toggleSettings: false,
+      test: {},
+      someText: '',
+      testData: ''
+    }
+  },
+  methods: {
+    testFn() {
+      this.test = {
+        global: this.someText
+      }
+      let data = new FormData()
+      data.append(this.test)
+
+      this.$nextTick( () => this.$refs.vuetable.refresh())
+    },
+    // DATATABLE
+    myFetch(apiUrl, httpOptions) {
+      // console.log(httpOptions.params, this.datatablePagination)
+      let pageParams = httpOptions.params;
+      let data = ({
+        'per_page': pageParams.per_page,
+        'current_page': pageParams.page,
+        'sort': pageParams.sort
+      }
+
+      // ПОПРОБОВАТЬ ВЫЧИСЛЯТЬ СВОЮ ПАГИНАЦИЮ!!!!
+        // function pagination(length, currentPage, itemsPerPage) {
+        //     return {
+        //         total: length,
+        //         per_page: itemsPerPage,
+        //         current_page: currentPage,
+        //         last_page: Math.ceil(length / itemsPerPage),
+        //         from: ((currentPage - 1) * itemsPerPage) + 1,
+        //         to: currentPage * itemsPerPage
+        //     };
+        // };
+      console.log(apiUrl);
+      return axios.post(apiUrl, data);
+    },
+    onPaginationData(paginationData) {
+      this.datatablePagination = paginationData;
+      // console.log('datatable pagination', this.datatablePagination)
+      this.$refs.pagination.setPaginationData(paginationData);
+      this.$refs.paginationInfo.setPaginationData(paginationData);
+    },
+    onDatatableReload() {
+      this.$refs.vuetable.reload();
+      console.log('reloading');
+    },
+
+    // Прячем/показываем колонку по клику
+    onHandleClick(colname) {
+      this.fields.map((item) => {
+        item.name === colname ? item.visible = !item.visible : false
+      });
+      this.$refs.vuetable.normalizeFields();
+    },
+    onEditRow(value) {
+      // console.log(value)
+      this.$emit('edit', value);
+    },
+    onDeleteRow(value) {
+      console.log(value);
+      this.$emit('delete', value);
+    },
+    onPaginationData(paginationData) {
+      this.$refs.pagination.setPaginationData(paginationData);
+      this.$refs.paginationInfo.setPaginationData(paginationData);
+    },
+    onChangePage(page) {
+      console.log('page', page);
+      this.$refs.vuetable.changePage(page);
+    },
+    onChangePerPage(num) {
+      this.perPage = num;
+      this.$nextTick()
+        .then( () => this.$refs.vuetable.reload());
+    },
+    onToggleDatatable (action, data, index) {
+      this.$refs.vuetable.toggleDetailRow(data.id);
+    },
+    onToggleIcon(data) {
+      let icon = this.$refs.vuetable.isVisibleDetailRow(data.id) ? true : false;
+      return icon;
+    },
+    onToggleSettings() {
+      this.toggleSettings = !this.toggleSettings;
+    },
+    onCellClicked (data, field, event) {
+      this.$emit('cell-clicked', data);
+    },
+    decrementFieldsLenght(col) {
+      this.fieldsLength = col - 1;
+    },
+    incrementFieldsLenght(col) {
+      col < this.fields.length ? this.fieldsLength = col + 1 : this.fieldsLength = this.fields.length - 1;
+    },
+    handleOrientation(col = this.fields.length - 1) {
+      // Объявляем переменные
+        let tableCont = this.$refs.vuetable;
+        let dataTableRect = tableCont.$el.getBoundingClientRect();
+        let dataTableOffset = dataTableRect.x;
+        let dataTableWidth = dataTableRect.right; // было width
+        // определяем, открыт сайт на мобильном устройтсве (планшет или мобила) или на ПК. Возвращает true или false
+        let matchMedia = (window.matchMedia('(max-device-width: 1400px) and (orientation: landscape)').matches || window.matchMedia('(max-device-width: 1400px) and (orientation: portrait)').matches);
+
+        // если мобильно устройство - берем ширину экрана. Если ПК - ширину окна браущера
+        let browserWidth = matchMedia ? screen.width - 50 : window.innerWidth; // - dataTableOffset - 60 или 49
+        // Если ширина таблицы меньше ширины экрана, проверяем наличие скрытых колонок
+      if (dataTableWidth < browserWidth) return;
+
+      if (col > 1 && col < this.fields.length) {
+        // dataTableWidth + 20  - это погрешность в пикселях кнопки Plus, иначе таблица дергается при изменении ширины окна
+        let breakpoint = { col: col, width: dataTableWidth + 20};
+        // После чего вписываем в массив контрольных точек координату
+        this.$nextTick()
+          .then(() => this.fields[col].visible = false)
+          .then(() => this.$refs.vuetable.normalizeFields())
+          .then(() => this.dtBreakpoints.unshift(breakpoint))
+          .then(() => this.decrementFieldsLenght(col))
+          // Странно ведет себя с двумя таблицами. Перепроверить потом еще раз 23.05
+          .then(() => { if (dataTableWidth > browserWidth) this.handleOrientation(this.fieldsLength) })
+      }
+    },
+    handleResize(col = this.fields.length - 1) {
+      // Объявляем переменные
+        let tableCont = this.$refs.vuetable;
+        let dataTableRect = tableCont.$el.getBoundingClientRect();
+        let dataTableOffset = dataTableRect.x;
+        let dataTableWidth = dataTableRect.right; // было width
+        // определяем, открыт сайт на мобильном устройтсве (планшет или мобила) или на ПК. Возвращает true или false
+        let matchMedia = (window.matchMedia('(max-device-width: 1400px) and (orientation: landscape)').matches || window.matchMedia('(max-device-width: 1400px) and (orientation: portrait)').matches);
+
+        // если мобильно устройство - берем ширину экрана. Если ПК - ширину окна браущера
+        let browserWidth = matchMedia ? screen.width - 23 : window.innerWidth - 49; // - dataTableOffset - 60 или 49
+      // Если ширина таблицы меньше ширины экрана, проверяем наличие скрытых колонок
+      if (dataTableWidth < browserWidth) {
+        if (!this.dtBreakpoints.length) return;
+        // В массиве брейкпойнтов сверяем НУЛЕВУЮ контрольную точку с шириной экрана. Если число меньше ширины экрана, мы меняем счетчик и убираем позицию из массива
+        if (this.dtBreakpoints[0].width < browserWidth) {
+          this.$nextTick()
+              .then(() => this.fields[this.dtBreakpoints[0].col].visible = true)
+              .then(() => this.$refs.vuetable.normalizeFields())
+              .then(() => this.incrementFieldsLenght(col))
+              .then(() => this.dtBreakpoints.shift())
+        }
+        return;
+      }
+
+      if (col > 2 && col < this.fields.length) {
+        // dataTableWidth + 20  - это погрешность в пикселях кнопки Plus, иначе таблица дергается при изменении ширины окна
+        let breakpoint = { col: col, width: dataTableWidth + 20};
+        // После чего вписываем в массив контрольных точек координату
+        this.$nextTick()
+          .then(() => this.fields[col].visible = false)
+          .then(() => this.$refs.vuetable.normalizeFields())
+          .then(() => this.dtBreakpoints.unshift(breakpoint))
+          .then(() => this.decrementFieldsLenght(col))
+      }
+    },
+    onHandleBreakpoint(bp) {
+      if (!this.dtBreakpoints.length) {
+        this.dtBreakpoints.unshift(bp);
+      } else {
+        this.dtBreakpoints.find(item => item.col === bp.col ? null : this.dtBreakpoints.unshift(bp));
+      }
+    },
+    // Проверяем размер окна. Не реагирует, если меняется высота экрана
+    windowResize() {
+      let width = window.innerWidth;
+      if (width !== this.screenWidth) {
+        this.handleResize(this.fieldsLength);
+        this.screenWidth = width;
+      };
+    },
+    onOrientationChange() {
+      this.$refs.vuetable.reload();
+    },
+    onDtLoading() {
+      this.isDtLoading = true;
+    },
+    onDtLoaded() {
+      this.isDtLoading = false;
+      this.handleOrientation(this.fields.length - 1);
+    },
+    dataManager (sortOrder, pagination) {
+      console.log(this.data, this.perPage);
+      console.log('dataManager: ', pagination);
+
+      let data = this.data;
+
+      // account for search filter
+      if (this.searchFor) {
+        // the text should be case insensitive
+        let txt = new RegExp(this.searchFor, 'i');
+
+        // search on name, email, and nickname
+        data = _.filter(data, function(item) {
+          return item.name.input(txt) >= 0 || item.email.search(txt) >= 0 || item.nickname.search(txt) >= 0
+        });
+      }
+
+      // sortOrder can be empty, so we have to check for that as well
+      if (sortOrder.length > 0) {
+        console.log('orderBy:', sortOrder[0].sortField, sortOrder[0].direction);
+      	data = _.orderBy(data, sortOrder[0].sortField, sortOrder[0].direction);
+      }
+
+      // since the filter might affect the total number of records
+      // we can ask Vuetable to recalculate the pagination for us
+      // by calling makePagination(). this will make VuetablePagination
+      // work just like in API mode
+      pagination = this.$refs.vuetable.makePagination(this.data.total, this.perPage);
+
+      // if you don't want to use pagination component, you can just
+      // return the data array
+      return {
+        pagination: pagination,
+        data: _.slice(data, pagination.from-1, pagination.to)
+      };
+    }
+  },
+  computed: {
+    onHideToggle() {
+      return this.dtBreakpoints.length ? true : false;
+    },
+    testComp() {
+      let obj = {
+        global: this.test
+      }
+      console.log(obj)
+      return axios.post()
+    }
+
+  },
+  mounted() {
+
+    // js resize mounted
+    this.fieldsLength = this.fields.length - 1;
+    // window.addEventListener('optimizedResize', this.windowResize)
+    // window.addEventListener('orientationchange', this.onOrientationChange)
+  },
+  destroyed() {
+    // window.removeEventListener('optimizedResize', this.windowResize)
+    // window.removeEventListener('orientationchange', this.onOrientationChange)
+  },
+
+}
+</script>

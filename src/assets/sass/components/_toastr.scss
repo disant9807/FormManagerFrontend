@@ -1,0 +1,40 @@
+.toast {
+  position: relative;
+  margin: 5px;
+  padding: 15px 15px;
+  display: flex;
+  overflow: hidden;
+  width: auto;
+  max-width: unset;
+  align-items: center;
+  opacity: 0.95;
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.215rem;
+  cursor: pointer;
+  user-select: none;
+
+  @each $color, $hash in $theme-colors {
+    &--#{$color} {
+      background-color: $hash;
+    }
+  }
+
+  &__close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    &:focus,
+    &:hover {
+      opacity: 0.4;
+      text-decoration: none;
+      color: #000;
+      cursor: pointer;
+    }
+  }
+
+  &__icon {
+    position: relative;
+  }
+}

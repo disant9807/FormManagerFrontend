@@ -1,0 +1,151 @@
+.transparent .globalsearch {
+  padding: 0 30px;
+  display: flex;
+  height: 66px;
+  flex: 1 1 100%;
+  align-items: center;
+  vertical-align: middle;
+
+  @media (max-width: 768px) {
+    //padding: 0 12px;
+    padding: 0 35px;
+    padding-left: 20px;
+  }
+
+  .active {
+    background-size: 100% 2px;
+    box-shadow: none;
+    transition-duration: 0.3s;
+  }
+
+  &__block {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    flex: 1 1 auto;
+    background-color: transparent;
+    background-image: linear-gradient(#fff, #fff);
+    background-repeat: no-repeat;
+    background-position: bottom, 50% calc(100% - 1px);
+    background-size: 0 2px, 100% 1px;
+    box-shadow: 0 0 black;
+    transition: background 0s ease-out;
+    cursor: pointer;
+  }
+
+  &__form {
+    position: relative;
+    margin-right: 0;
+    margin-left: 0;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 4px;
+    box-shadow: none;
+    transition: background 100ms ease, width 100ms ease;
+  }
+
+  &__input-cont {
+    padding: 0;
+    overflow: hidden;
+    height: 46px;
+
+    input {
+      padding: 11px 15px 11px 45px;
+      box-sizing: border-box;
+      width: 100%;
+      height: 46px;
+      color: #fff;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+
+      @media (max-width: 768px) {
+        padding: 11px 15px 11px 40px;
+      }
+
+      &::placeholder {
+        // Скрываем текст плейсхолдера
+        color: transparent;
+      }
+    }
+  }
+
+  &__delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: opacity 200ms ease;
+  }
+
+  &__refresh,
+  &__refresh-button {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+  }
+
+  &__search,
+  &__close {
+    position: absolute;
+    top: 3px;
+    padding: 11px;
+    line-height: 0;
+
+    @media (max-width: 768px) {
+      padding: 11px;
+      padding-left: 0;
+    }
+  }
+
+  &__close {
+    right: 0;
+  }
+
+  &__search {
+    left: 0;
+  }
+
+  &__searchresult {
+    position: absolute;
+    top: 46px;
+    padding: 15px 0;
+    display: block;
+    width: 100%;
+    min-width: 300px;
+    max-width: 460px;
+    background: rgba(0, 0, 0, 0.41);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+
+    .list-group-item {
+      margin-bottom: auto;
+      padding: 0.75rem 0.5em;
+      color: #fff;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid #595959;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+    }
+
+    .badge-info {
+      float: right;
+    }
+
+    button {
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      color: #62a8ea;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}

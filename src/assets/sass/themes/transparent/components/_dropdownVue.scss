@@ -1,0 +1,32 @@
+.transparent {
+  // Стили dropdownVue на рабочем столе
+  .dd {
+    color: #fff;
+
+    .title {
+      &__username {
+        color: #fff;
+      }
+    }
+
+    .item-box {
+      color: $gray;
+      background-color: #fff;
+
+      @media (max-width: 768px) {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      &__element &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+    }
+  }
+  // Стили colorElementBlock на рабочем столе
+  .color-menu-btns {
+    .btn_correct &:hover {
+      box-shadow: 0 0 2px 2px #f8f9fa;
+    }
+  }
+}

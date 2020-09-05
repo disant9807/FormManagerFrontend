@@ -1,0 +1,38 @@
+{
+  "extends": "stylelint-config-standard",
+  "plugins": [
+    "stylelint-order",
+    "stylelint-scss"
+  ],
+  "rules": {
+    "at-rule-no-unknown": [true, {
+      "ignoreAtRules": ["function", "for", "if", "each", "include", "mixin"]
+    }],
+    "block-no-empty": true,
+    "color-no-invalid-hex": true,
+    "comment-no-empty": true,
+    "declaration-block-no-duplicate-properties": true,
+    "declaration-no-important": true,
+    "declaration-property-value-blacklist": {
+      "/^margin/": ["initial"],
+      "/^padding/": ["initial"],
+      "flex-grow": ["initial"]
+    },
+    "function-calc-no-unspaced-operator": true,
+    "function-linear-gradient-no-nonstandard-direction": true,
+    "no-empty-source": null,
+    "no-descending-specificity": null,
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["user-drag", "font-smooth"]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["v-deep"]
+      }
+    ]
+  }
+}

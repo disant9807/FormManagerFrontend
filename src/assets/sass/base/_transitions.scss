@@ -1,0 +1,10 @@
+// directory
+.fade-transition-enter-active,
+.fade-transition-leave-active {
+  transition: opacity 0.2s;
+}
+
+.fade-transition-enter,
+.fade-transition-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+  opacity: 0;
+}

@@ -1,0 +1,106 @@
+$content-height: 30px;
+$blank-li-height: 5px;
+
+.sortable-tree {
+  min-height: $blank-li-height;
+
+  &__content {
+    position: relative;
+    padding: 0.2em 0;
+    display: flex;
+    align-items: baseline;
+    user-select: none;
+
+    &:hover {
+      color: $blue;
+      background-color: rgba(0, 0, 0, 0.03);
+
+      .sortable-tree__icon {
+        color: $blue;
+        fill: $blue;
+      }
+    }
+  }
+
+  &__folder {
+    position: relative;
+  }
+
+  &__icon {
+    vertical-align: top;
+    fill: #76838f;
+  }
+
+  .blank-li {
+    .sortable-tree__content {
+      overflow: hidden;
+      width: 0;
+      height: 0;
+    }
+  }
+
+  ul,
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul {
+    position: relative;
+    display: list-item;
+    list-style: none;
+
+    &:empty {
+      width: 0;
+      height: 0;
+    }
+  }
+
+  li {
+    position: relative;
+    //padding-left: 24px;
+
+    &::before,
+    &::after {
+      position: absolute;
+      content: '';
+    }
+
+    &.blank-li {
+      padding: 0;
+    }
+
+    @media (max-width: 640px) {
+      padding-left: 15px;
+    }
+  }
+}
+// 拖动相关
+.draging {
+  background: #efeeef;
+}
+
+.droper {
+  background: $blue;
+
+  .exist-li {
+    color: #fff;
+  }
+
+  svg {
+    fill: #fff;
+  }
+}
+
+.tree {
+  &__block {
+    display: flex;
+    min-width: 60px;
+    min-height: 24px;
+    justify-content: flex-end;
+  }
+}
+
+.ml-1-4 {
+  margin-left: 1.3rem;
+}

@@ -1,0 +1,130 @@
+// Здесь у нас бутстраповские стили, который нужно кастомизиромизировать конкретно под сайт
+.bg-default {
+  background-color: $default;
+}
+
+.b-tooltip,
+.tooltip {
+  outline: none;
+}
+
+.custom-select {
+  font-size: inherit;
+  color: inherit;
+  border: 1px solid #e4eaec;
+}
+
+.custom-control-input {
+  display: none;
+}
+
+.custom-switch .custom-control-label::before {
+  top: 2px;
+}
+
+.custom-switch .custom-control-label::after {
+  top: 4px;
+}
+
+.drift-bounding-box {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.drift-zoom-pane .drift-open,
+.drift-zoom-pane {
+  @media (max-width: 610px) {
+    display: none;
+  }
+}
+
+.form-control {
+  padding: 0.375rem 1.5rem 0.375rem 0.75rem;
+  font-size: 1em;
+  color: #76838f;
+  border: 1px solid #e4eaec;
+
+  &.is-invalid {
+    background-image: none;
+  }
+
+  &::placeholder {
+    color: $placeholder;
+  }
+}
+
+.input-group > .btn {
+  border-radius: 0;
+}
+
+.input-group > .btn:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+/*
+Как минимум используется в разделе Projects вкладка Выполнение
+*/
+.nav-pills {
+  a.nav-link {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .active {
+      color: #fff;
+      background-color: $blue;
+    }
+
+    &:hover.active {
+      color: #fff;
+      background-color: darken($blue, 5%);
+    }
+  }
+}
+
+.nav-tabs-line {
+  position: relative;
+
+  a.active,
+  .nav-link.active {
+    color: $blue;
+    border-color: transparent;
+    border-bottom: 2px solid $blue;
+
+    &:hover.active {
+      color: darken($blue, 10%);
+      border-bottom: 2px solid darken($blue, 10%);
+    }
+  }
+
+  a:hover,
+  .nav-link:hover {
+    border-color: transparent;
+    border-bottom: 2px solid darken($light-gray, 10%);
+  }
+}
+
+.page-link {
+  cursor: pointer;
+}
+
+.tab-content,
+.tab-pane {
+  outline: none;
+}
+
+/*
+Bootstrap Popover
+*/
+.popover,
+.popover:focus {
+  outline: none;
+}
+
+// TODO: написать формулу и миксин для вычисления смещения в пикселях
+// Используется в карточке пользователя. Смещение заголовка
+.ml-n32px {
+  margin-left: -32px;
+}

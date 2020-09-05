@@ -1,0 +1,27 @@
+.dropdown-menu {
+  width: auto;
+  min-width: auto;
+}
+
+.dropdown-item {
+  padding: 0.572rem 1.072rem;
+  color: #76838f;
+  transition: background-color 0.25s;
+
+  svg {
+    fill: #76838f;
+  }
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  text-decoration: none;
+  color: #76838f;
+  background-color: #f3f7f9;
+  outline: none;
+}
+
+.dropdown-toggle::after {
+  position: relative;
+  right: -14px;
+}

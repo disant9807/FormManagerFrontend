@@ -1,0 +1,199 @@
+.btn {
+  // в дататейбл используется чтобы скрывать большой текст кнопок 17.05.18
+  overflow: hidden;
+  //position: relative;
+  font-size: 1em;
+  cursor: pointer;
+
+  &__nav {
+    margin: 0;
+    padding: 0.5rem 0.74rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__title {
+    display: inline-block;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+  }
+
+  &--disabled {
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  &--fixed {
+    position: fixed;
+    z-index: 40;
+    right: 10%;
+    bottom: 10%;
+    display: flex;
+    overflow: unset;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &--form-control {
+    height: calc(1.5em + 0.75rem + 2px);
+  }
+
+  &--icon {
+    padding: 0.575rem 0.65rem;
+    line-height: 1;
+  }
+
+  &--iconMd {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &--iconFit {
+    padding: 0;
+    line-height: 1;
+  }
+
+  &--large {
+    padding: 10px;
+  }
+
+  &--list-toggle {
+    // Для маленьких кнопок типа "+" и "-" в таблицах, где нужно разворачивать список
+    padding: 0;
+    line-height: 1;
+  }
+
+  &--round {
+    border-radius: 50%;
+  }
+
+  &--square {
+    border-radius: unset;
+  }
+
+  &--small {
+    padding: 0.475rem;
+  }
+
+  &--medium {
+    padding: 0.175rem 0.5rem;
+  }
+
+  &--transparent {
+    color: $gray;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: darken($gray, 30%);
+    }
+  }
+
+  &--xlarge {
+    padding: 1.5em;
+  }
+
+  &-text {
+    position: relative;
+    background-color: transparent;
+    border: none;
+  }
+
+  &.disabled {
+    cursor: auto;
+
+    &:focus,
+    &:active {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  @each $color, $hash in $theme-colors {
+    &-text-#{$color} {
+      //position: relative;
+      width: fit-content;
+      color: $hash;
+      cursor: pointer;
+
+      &:hover {
+        color: darken($hash, 7.5%);
+      }
+
+      &:active,
+      &.active {
+        color: darken($hash, 10%);
+      }
+    }
+    &-inverse-#{$color} {
+      //position: relative;
+      background-color: $hash;
+
+      &:hover,
+      &.active {
+        background-color: transparent;
+        border-color: $hash;
+      }
+    }
+  }
+}
+
+.btn-default,
+.btn-outline-default {
+  color: $gray;
+  background-color: transparent;
+  border-color: $default;
+
+  &:active,
+  &:hover,
+  &:focus,
+  &:not(:disabled):not(.disabled):active,
+  &.active {
+    color: $dark;
+    background-color: $default;
+    border-color: $default;
+  }
+
+  &.disabled {
+    color: $dark;
+    background-color: $default;
+    border-color: $default;
+  }
+}
+
+.btn-text-default {
+  //position: relative;
+  width: fit-content;
+  color: $gray;
+  cursor: pointer;
+
+  &:hover {
+    color: darken($gray, 7.5%);
+  }
+
+  &:active,
+  &.active {
+    color: darken($gray, 10%);
+  }
+}
+
+.btn-xs {
+  padding: 4px;
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+button {
+  &:active,
+  &:focus,
+  &:hover {
+    outline: none;
+  }
+}

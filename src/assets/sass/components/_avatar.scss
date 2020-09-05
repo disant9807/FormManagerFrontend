@@ -1,0 +1,74 @@
+.avatar {
+  position: relative;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  line-height: 1;
+
+  img,
+  svg {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  div,
+  span {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+  }
+
+  &--xxl {
+    width: 100px;
+    height: 100px;
+  }
+
+  &--medium {
+    width: 30px;
+    height: 30px;
+  }
+
+  &--small {
+    width: 21px;
+    height: 21px;
+  }
+
+  &--thumbnail {
+    padding: 0.15rem;
+    max-width: 100%;
+    height: auto;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+  }
+
+  &--round {
+    padding: 1px;
+    border: 1px solid #848f99;
+    border-radius: 50%;
+
+    img,
+    svg {
+      border-radius: 50%;
+    }
+  }
+}
+
+.avatar-online {
+  position: relative;
+
+  i {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    background-color: #11c26d;
+    border: 2px solid #fff;
+    border-radius: 100%;
+  }
+}

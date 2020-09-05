@@ -1,0 +1,33 @@
+.table {
+  color: inherit;
+
+  & > tbody > tr > td,
+  & > tbody > tr > th,
+  & > tfoot > tr > td,
+  & > tfoot > tr > th,
+  & > thead > tr > td,
+  & > thead > tr > th {
+    padding: 3px;
+    line-height: 1.57142857;
+    vertical-align: top;
+    border-top: 1px solid #e4eaec;
+  }
+
+  & > thead > tr,
+  & > tfoot > tr {
+    font-weight: 500;
+    text-shadow: none;
+    background: rgb(241, 244, 245);
+  }
+
+  & > tfoot > tr > th,
+  & > thead > tr > th {
+    font-weight: 400;
+    color: #526069;
+  }
+
+  & th,
+  & td {
+    border: none;
+  }
+}

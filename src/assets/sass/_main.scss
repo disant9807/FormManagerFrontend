@@ -1,0 +1,41 @@
+//Анимации для transition vue2-animate
+$animationDuration: 150ms; // Глобально задаем время анимации
+
+@import '~vue2-animate/src/sass/vue2-animate.scss';
+
+// Сначала загружаем переменные с цветами, потом сами стили Бутстрапа
+@import 'variables';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+// @import '~drift-zoom/src/css/drift-basic';
+
+// 1 Base
+@import 'base/_base';
+@import 'base/_typography';
+@import 'base/_transitions';
+
+// 2 Components
+@import 'components/_avatar';
+@import 'components/_badge';
+@import 'components/_buttons';
+@import 'components/_dtable';
+@import 'components/_filter';
+@import 'components/_navbar';
+@import 'components/_modal';
+@import 'components/_search';
+@import 'components/_sortable-tree';
+@import 'components/_table';
+@import 'components/_shakeanimation';
+
+// 4 Layout
+@import 'layout/_grid';
+@import 'layout/_page';
+@import 'layout/_panel';
+
+// 5 Themes
+@import 'themes/transparent/_main';
+
+// 6 vendor
+@import 'vendor/_custom';
+@import 'vendor/_dropdown';
+@import 'vendor/_multiselect';

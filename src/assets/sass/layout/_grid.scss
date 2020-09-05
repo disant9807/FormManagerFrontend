@@ -1,0 +1,8 @@
+.flex {
+  position: relative;
+  display: flex;
+
+  &__basis {
+    flex: 1 1 auto;
+  }
+}

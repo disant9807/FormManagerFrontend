@@ -1,0 +1,10 @@
+@import 'components/_header-transparent';
+@import 'components/_globalsearch-transparent';
+@import 'components/_footer-transparent';
+@import 'components/_dropdownVue';
+
+.transparent {
+  min-height: 100vh;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+}
